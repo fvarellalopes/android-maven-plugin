@@ -7,7 +7,7 @@ Este repositório contém workflows do GitHub Actions para automatizar a compila
 ### 1. Build and Package (`build.yml`)
 - **Trigger**: Push para branches `master`/`main`, Pull Requests, ou execução manual
 - **Funcionalidades**:
-  - Build com Java 11
+  - Build com Java 17
   - Configura Android SDK automaticamente
   - Executa testes
   - Gera JAR do plugin
@@ -17,7 +17,7 @@ Este repositório contém workflows do GitHub Actions para automatizar a compila
 ### 2. Quick Build (`quick-build.yml`)
 - **Trigger**: Push para branches de desenvolvimento (exceto `master`/`main`)
 - **Funcionalidades**:
-  - Build rápido com Java 11
+  - Build rápido com Java 17
   - Pula testes para desenvolvimento ágil
   - Verifica se o JAR foi criado com sucesso
 
@@ -45,7 +45,7 @@ Após o build:
 
 ## Requisitos do Projeto
 
-- **Java**: 11
+- **Java**: 17 (requerido pelo Android SDK Manager)
 - **Maven**: 3.0.4+
 - **Android SDK**: API 28, Build Tools 28.0.3
 
@@ -58,7 +58,8 @@ target/android-maven-plugin-{version}.jar
 
 ## Notas Importantes
 
-- O projeto usa Java 11 como versão padrão
+- O projeto usa Java 17 como versão padrão (requerido pelo Android SDK cmdline-tools)
+- A variável `SKIP_JDK_VERSION_CHECK` é usada para compatibilidade com Android SDK
 - Testes requerem Android SDK configurado
 - Cache do Maven é usado para acelerar builds subsequentes
 - Builds de release são criados automaticamente para tags
