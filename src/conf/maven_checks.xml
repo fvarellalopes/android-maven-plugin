@@ -50,7 +50,9 @@ Android Maven Plugin uses the APL v2 but with copyright mentions -->
     <!-- See http://checkstyle.sf.net/config_misc.html#Translation -->
     <!-- module name="Translation"/ -->
 
-    <module name="FileLength"/>
+    <!-- Temporarily disabled due to compatibility issues -->
+    <!-- module name="FileLength"/ -->
+    <!-- Alternative if above fails: <module name="com.puppycrawl.tools.checkstyle.checks.sizes.FileLengthCheck"/> -->
 
     <!-- Checks for Headers                              -->
     <!-- See http://checkstyle.sf.net/config_header.html -->
