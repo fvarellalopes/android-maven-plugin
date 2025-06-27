@@ -1,0 +1,132 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        java-version: [8, 11, 17]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK ${{ matrix.java-version }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java-version }}
+        distribution: 'temurin'
+        
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 28
+        build-tools: 28.0.3
+        
+    - name: Validate Maven wrapper
+      run: |
+        if [ -f "./mvnw" ]; then
+          chmod +x ./mvnw
+        fi
+        
+    - name: Compile project
+      run: |
+        if [ -f "./mvnw" ]; then
+          ./mvnw clean compile -B
+        else
+          mvn clean compile -B
+        fi
+        
+    - name: Run tests
+      run: |
+        if [ -f "./mvnw" ]; then
+          ./mvnw test -B
+        else
+          mvn test -B
+        fi
+        
+    - name: Package JAR
+      run: |
+        if [ -f "./mvnw" ]; then
+          ./mvnw package -DskipTests -B
+        else
+          mvn package -DskipTests -B
+        fi
+        
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v4
+      if: matrix.java-version == '8'  # Only upload from Java 8 build
+      with:
+        name: android-maven-plugin-jar
+        path: target/*.jar
+        retention-days: 30
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always() && matrix.java-version == '8'
+      with:
+        name: test-results
+        path: |
+          target/surefire-reports/
+          target/failsafe-reports/
+        retention-days: 30
+
+  # Job separado para release quando há tags
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 8
+      uses: actions/setup-java@v4
+      with:
+        java-version: 8
+        distribution: 'temurin'
+        
+    - name: Cache Maven dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        api-level: 28
+        build-tools: 28.0.3
+        
+    - name: Build release JAR
+      run: |
+        if [ -f "./mvnw" ]; then
+          ./mvnw clean package -DskipTests -B
+        else
+          mvn clean package -DskipTests -B
+        fi
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: target/*.jar
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
