@@ -2,16 +2,62 @@
 
 image:https://img.shields.io/maven-central/v/com.simpligility.maven.plugins/android-maven-plugin.svg?label=Maven%20Central["Build Status", link="https://search.maven.org/search?q=g:%22com.simpligility.maven.plugins%22%20AND%20a:%22android-maven-plugin%22"]
 
-A plugin for Android application development with http://maven.apache.org[Apache Maven 3.0.5+] and
+A comprehensive Maven plugin for Android application development with http://maven.apache.org[Apache Maven 3.0.5+] and
 the http://tools.android.com[Android SDK].
 
-Please check out our http://simpligility.github.io/android-maven-plugin/[website] for further information!
+=== 📚 Documentation
+
+**Complete documentation is now available in the `docs/` directory:**
+
+* **link:docs/getting-started.md[🚀 Getting Started]** - Quick start guide for new users
+* **link:docs/configuration-reference.md[⚙️ Configuration Reference]** - Complete configuration options
+* **link:docs/goals-reference.md[🎯 Goals Reference]** - Detailed documentation of all plugin goals
+* **link:docs/examples/[📋 Examples]** - Practical examples and use cases
+  - link:docs/examples/basic-android-app/[Basic Android App]
+  - link:docs/examples/android-library/[Android Library]
+  - link:docs/examples/testing/[Testing Examples]
+  - link:docs/examples/ndk-build/[NDK Build]
+  - link:docs/examples/multi-module/[Multi-Module Project]
+* **link:docs/advanced-topics.md[🔧 Advanced Topics]** - Advanced features and configurations
+* **link:docs/troubleshooting.md[🩺 Troubleshooting]** - Common issues and solutions
+
+=== Quick Start
+
+Add the plugin to your `pom.xml`:
+
+[source,xml]
+----
+<plugin>
+    <groupId>com.simpligility.maven.plugins</groupId>
+    <artifactId>android-maven-plugin</artifactId>
+    <version>4.6.1</version>
+    <extensions>true</extensions>
+</plugin>
+----
+
+See the link:docs/getting-started.md[Getting Started Guide] for complete setup instructions.
+
+=== Features
+
+The Android Maven Plugin provides:
+
+* ✅ Complete Android project lifecycle management
+* 📦 APK building and packaging
+* 📱 Device deployment and testing
+* 🔧 NDK compilation support
+* 📊 Code coverage and static analysis
+* 🎮 Emulator management
+* 🐒 UI testing with Monkey and UIAutomator
+* 🔒 ProGuard integration
+* 📈 Lint analysis
+* And much more!
 
 === Additional Links
 
 * https://github.com/simpligility/android-maven-plugin/issues[Issue tracker]
 * https://groups.google.com/forum/?fromgroups#!forum/maven-android-developers[Mailinglist]
 * https://github.com/simpligility/android-maven-plugin/blob/master/src/site/asciidoc/changelog.adoc[Current Changelog]
+* http://simpligility.github.io/android-maven-plugin/[Official Website]
 * image:https://travis-ci.org/simpligility/android-maven-plugin.png["Build Status", link="https://travis-ci.org/simpligility/android-maven-plugin"]
 
 === Contributions
